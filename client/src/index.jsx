@@ -19,10 +19,14 @@ class App extends React.Component {
     console.log(`${term} was searched`);
     axios.post('/repos', {
       username: term
-    });
+    })
+      .then(response => {
+        this.componentDidMount();
+      });
   }
 
   componentDidMount() {
+    console.log('component mounted');
     axios.get('/repos')
       .then(repos => {
         console.log(repos.data)

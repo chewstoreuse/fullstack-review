@@ -32,7 +32,7 @@ let save = (repos) => {
           id: repo.id,
           username: repo.owner.login,
           name: repo.name,
-          url: repo.url,
+          url: repo.html_url,
           forks: repo.forks
         });
 
