@@ -20,16 +20,24 @@ let save = (repos) => {
   // This function should save a repo or repos to
   // the MongoDB
   repos.forEach(repo => {
-    Repo.findOne({ id: repo.id }, (noMatch) => {
-      let instance = new Repo({
-        id: repo.id,
-        username: repo.owner.login,
-        name: repo.name,
-        url: repo.url,
-        forks: repo.forks
-      });
+    Repo.findOne({ id: repo.id }, (err, match) => {
+      if (err) {
+        console.log(err);
+      }
 
-      instance.save();
+      if (match) {
+        console.log('duplicate detected');
+      } else {
+        let instance = new Repo({
+          id: repo.id,
+          username: repo.owner.login,
+          name: repo.name,
+          url: repo.url,
+          forks: repo.forks
+        });
+
+        instance.save();
+      }
     });
   });
 }

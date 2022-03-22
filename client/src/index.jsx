@@ -27,7 +27,8 @@ class App extends React.Component {
       .then(repos => {
         console.log(repos.data)
         this.setState({
-          repos: repos.data
+          repos: repos.data,
+          topRepos: repos.data.splice(0, 25)
         });
       });
   }
@@ -37,7 +38,7 @@ class App extends React.Component {
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos} />
       <Search onSearch={this.search.bind(this)} />
-      <TopList topRepos={this.state.repos} />
+      <TopList topRepos={this.state.topRepos} />
     </div>)
   }
 }
