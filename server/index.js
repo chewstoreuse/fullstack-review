@@ -14,8 +14,11 @@ app.post('/repos', function (req, res) {
   // save the repo information in the database
   getReposByUsername(req.body.username, (data) => {
     // console.log(data);
-    save(data);
-    res.sendStatus(201);
+    save(data, () => {
+      retrieve((repos) => {
+        res.status(200).send(repos);
+      })
+    });
   });
 
 });
@@ -28,7 +31,7 @@ app.get('/repos', function (req, res) {
   });
 });
 
-let port = 1128;
+let port = process.env.PORT || 1128;
 
 app.listen(port, function () {
   console.log(`listening on port ${port}`);

@@ -15,30 +15,53 @@ let repoSchema = mongoose.Schema({
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (repos) => {
+let save = (repos, callback) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
   repos.forEach(repo => {
-    Repo.findOne({ id: repo.id }, (err, match) => {
-      if (err) {
-        console.log(err);
-      }
+    // works on refresh only
+    // Repo.findOne({ id: repo.id }, (err, match) => {
+    //   if (err) {
+    //     console.log(err);
+    //   }
 
-      if (match) {
-        console.log('duplicate detected');
-      } else {
-        let instance = new Repo({
-          id: repo.id,
-          username: repo.owner.login,
-          name: repo.name,
-          url: repo.html_url,
-          forks: repo.forks
-        });
+    //   if (match) {
+    //     console.log('duplicate detected');
+    //   } else {
+    //     let instance = new Repo({
+    //       id: repo.id,
+    //       username: repo.owner.login,
+    //       name: repo.name,
+    //       url: repo.html_url,
+    //       forks: repo.forks
+    //     });
 
-        instance.save();
-      }
-    });
+    //     instance.save()
+    //   }
+    // });
+
+    var filter = {
+      id: repo.id,
+      username: repo.owner.login,
+      name: repo.name,
+      url: repo.html_url,
+    };
+
+    var update = {
+      forks: repo.forks
+    };
+
+    Repo.findOneAndUpdate(filter, update, {
+      new: true,
+      upsert: true
+    })
+      .then(doc => {
+        if (JSON.stringify(repo) === JSON.stringify(repos[repos.length - 1])) {
+          callback();
+        }
+      })
+      .catch(err => console.log(err));
   });
 }
 

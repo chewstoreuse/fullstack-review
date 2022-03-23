@@ -20,19 +20,22 @@ class App extends React.Component {
     axios.post('/repos', {
       username: term
     })
-      .then(response => {
-        this.componentDidMount();
+      .then(repos => {
+        this.setState({
+          repos: repos.data,
+          topRepos: repos.data.slice(0, 25)
+        });
       });
   }
 
   componentDidMount() {
-    console.log('component mounted');
     axios.get('/repos')
       .then(repos => {
-        console.log(repos.data)
+        // console.log(repos.data);
+        // console.log('component mounted');
         this.setState({
           repos: repos.data,
-          topRepos: repos.data.splice(0, 25)
+          topRepos: repos.data.slice(0, 25)
         });
       });
   }

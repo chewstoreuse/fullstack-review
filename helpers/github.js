@@ -21,7 +21,7 @@ let getReposByUsername = (username, callback) => {
     })
     .catch(err => {
       console.log(err);
-    })
+    });
 }
 
 module.exports.getReposByUsername = getReposByUsername;
